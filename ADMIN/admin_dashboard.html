@@ -1,0 +1,57 @@
+<!-- admin_dashboard.php -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Admin Dashboard</h2>
+        <a href="logout.php">Logout</a>
+        <h3>Orders</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User ID</th>
+                    <th>Total Price</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                session_start();
+                if (!isset($_SESSION['admin_id'])) {
+                    header("Location: admin_login.php");
+                    exit();
+                }
+
+                $conn = new mysqli("localhost", "root", "", "crimsonplate");
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $result = $conn->query("SELECT * FROM orders");
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>{$row['id']}</td>
+                            <td>{$row['user_id']}</td>
+                           
+                            <td>{$row['total_price']}</td>
+                            <td>{$row['order_date']}</td>
+                            <td>
+                                <a href='view_order.php?id={$row['id']}'>View</a> | 
+                                <a href='delete_order.php?={$row['id']}'>Delete</a>
+                            </td>
+                          </tr>";
+                }
+
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

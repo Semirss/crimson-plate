@@ -1,0 +1,52 @@
+<!-- admin_login.php -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <link rel="stylesheet"  href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form action="admin_login.php" method="post">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit" name="login">Login</button>
+        </form>
+    </div>
+</body>
+</html>
+<!-- 
+<?php
+// admin_login.php (PHP Section)
+session_start();
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $conn = new mysqli("localhost", "root", "", "crimsonplate");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $admin = $result->fetch_assoc();
+
+    if ($admin && password_verify($password, $admin['password'])) {
+        $_SESSION['admin_id'] = $admin['admin_id'];
+        header("Location: admin_dashboard.php");
+    } else {
+        echo "<p>Invalid username or password</p>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?> -->

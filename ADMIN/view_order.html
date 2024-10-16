@@ -1,0 +1,67 @@
+<!-- view_order.php -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Order</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="order-container">
+        <h2>Order Details</h2>
+        <a href="admin_dashboard.php">Back to Dashboard</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Item ID</th>
+                    <th>Order ID</th>
+                    <th>Food ID</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                session_start();
+                if (!isset($_SESSION['admin_id'])) {
+                    header("Location: admin_login.php");
+                    exit();
+                }
+
+                if (!isset($_GET['order_id'])) {
+                    echo "Order ID not specified.";
+                    exit();
+                }
+
+                $order_id = $_GET['order_id'];
+
+                $conn = new mysqli("localhost", "root", "", "crimsonplate");
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $stmt = $conn->prepare("SELECT * FROM order_items WHERE order_id = ?");
+                $stmt->bind_param("i", $order_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>{$row['id']}</td>
+                            <td>{$row['order_id']}</td>
+                            <td>{$row['food_id']}</td>
+                            <td>{$row['quantity']}</td>
+                            <td>{$row['price']}</td>
+                            <td>
+                                <a href='delete_order_item.php?order_item_id={$row['id']}'>Delete</a>
+                            </td>
+                          </tr>";
+                }
+
+                $stmt->close();
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
