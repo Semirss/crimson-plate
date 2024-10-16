@@ -1,0 +1,16 @@
+
+button{
+    margin-top: 16px;
+   height: 35px;
+    width: 5rem;
+color: white;
+  
+    font-size: 1rem;
+    background-color: #e63946;
+    box-shadow: 1px 0.8px 0.6px 0.1px #ffffff;
+    border: none;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: 15px;
+    cursor: pointer;  
+  }
